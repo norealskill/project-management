@@ -11,6 +11,7 @@ Currently utilizing the following technology stack:
 - Frontend
 
   - React
+  - nx
   - TailwindCSS
   - TanStack
     - Router
@@ -18,6 +19,7 @@ Currently utilizing the following technology stack:
     - Table
 
 - Backend
+  - nx
   - NestJS
   - Prisma
   - Postgres
