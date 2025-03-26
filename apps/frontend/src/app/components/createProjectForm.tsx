@@ -30,78 +30,77 @@ const CreateProjectForm = () => {
   });
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md bg-white shadow-lg rounded-2xl p-6">
-        <h2 className="text-2xl font-semibold text-gray-800 text-center">
+    <div className="flex min-h-full min-w-full items-center justify-center bg-gray-100">
+      <div className="w-full max-w-lg rounded-2xl border border-gray-200 bg-white p-8 shadow-2xl">
+        <h2 className="text-center text-3xl font-bold text-gray-900">
           Create Project
         </h2>
         <form
-          className="mt-4 space-y-4"
+          className="mt-6 space-y-5"
           onSubmit={(e) => {
             e.preventDefault();
             e.stopPropagation();
             form.handleSubmit();
           }}
         >
-          <div>
-            <form.Field
-              name="name"
-              validators={{
-                onChange: ({ value }) =>
-                  !value
-                    ? 'A project must have a name'
-                    : value.length < 3
-                    ? 'Project name must be more than three characters in length'
-                    : undefined,
-                onChangeAsyncDebounceMs: 500,
-                onChangeAsync: async ({ value }) => {
-                  await new Promise((resolve) => setTimeout(resolve, 1000));
-                  return (
-                    value.includes('error') && 'No "error" allowed in title'
-                  );
-                },
-              }}
-              children={(field) => {
-                return (
-                  <>
+          <form.Field
+            name="name"
+            validators={{
+              onChange: ({ value }) =>
+                !value
+                  ? 'A project must have a name'
+                  : value.length < 3
+                  ? 'Project name must be more than three characters in length'
+                  : undefined,
+            }}
+            children={(field) => {
+              return (
+                <>
+                  <div className="flex items-center space-x-4">
                     <label
-                      className="block text-sm font-medium text-gray-700"
+                      className="text-sm font-medium whitespace-nowrap text-gray-700"
                       htmlFor={field.name}
                     >
-                      Project Name:
+                      Project Title:
                     </label>
                     <input
-                      className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                      className="flex-1 rounded-lg border border-gray-300 px-4 py-3 shadow-sm transition focus:ring-4 focus:ring-blue-300 focus:outline-none"
                       id={field.name}
                       name={field.name}
                       value={field.state.value}
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
                     />
-                  </>
-                );
-              }}
-            />
-          </div>
+                    {field.state.meta.errors ? (
+                      <em role="alert">{field.state.meta.errors.join(', ')}</em>
+                    ) : null}
+                  </div>
+                  <div className="flex justify-end text-zinc-400">
+                    <p className="text-sm text-gray-500 -mt-5">Required</p>
+                  </div>
+                </>
+              );
+            }}
+          />
           <form.Subscribe
             selector={(state) => [state.canSubmit, state.isSubmitting]}
             children={([canSubmit, isSubmitting]) => (
-              <>
+              <div className="flex space-x-4">
                 <button
-                  className="w-full px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition"
+                  className="w-1/2 rounded-lg bg-blue-600 px-4 py-3 text-white shadow-md transition-all hover:bg-blue-700"
                   type="submit"
                   disabled={!canSubmit}
                 >
                   {isSubmitting ? '...' : 'Submit'}
                 </button>
                 <button
-                  className="w-full px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition"
+                  className="w-1/2 rounded-lg bg-gray-200 px-4 py-3 text-gray-700 shadow-md transition-all hover:bg-gray-300"
                   type="reset"
                   onClick={() => form.reset()}
                 >
                   Reset
                 </button>
-              </>
+              </div>
             )}
           />
         </form>

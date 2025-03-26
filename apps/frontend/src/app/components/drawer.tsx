@@ -27,7 +27,7 @@ const Drawer: React.FC<DrawerProps> = (props: DrawerProps) => {
           className="absolute inset-0 bg-black bg-opacity-50"
           onClick={() => setIsOpen(false)}
         ></div>
-        <div className="relative w-80 h-full bg-white shadow-lg p-4">
+        <div className="relative w-1/3 h-full bg-white shadow-lg p-4">
           <button
             className="absolute top-2 right-2 p-1 text-gray-600 hover:text-black"
             onClick={() => setIsOpen(false)}

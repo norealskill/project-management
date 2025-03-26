@@ -1,6 +1,6 @@
 model Task {
   id          Int       @id @default(autoincrement())
-  title       String    @db.VarChar(50)
+  name        String    @db.VarChar(50)
   completed   Boolean   @default(false)
   projectId   Int
   project     Project   @relation(fields: [projectId], references: [id])
