@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiHelper } from '../api/common';
 import { Project } from '../api/types';
-import { deleteProject } from '../api/projectMutations';
+import { useDeleteProject } from '../api/projects/useDeleteProject';
 import {
   ColumnDef,
   getCoreRowModel,
@@ -25,7 +25,7 @@ const ListProjects = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: deleteProject,
+    mutationFn: useDeleteProject,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects'] });
     },

@@ -1,23 +1,8 @@
 import { useForm } from '@tanstack/react-form';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { ProjectCreateArgs } from '../api/types';
-import { apiHelper } from '../api/common';
+import { useCreateProject } from '../api/projects/useCreateProject';
 
 const CreateProjectForm = () => {
-  const queryClient = useQueryClient();
-
-  const mutation = useMutation({
-    mutationFn: (newProject: ProjectCreateArgs) => {
-      return fetch(apiHelper('project'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newProject),
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['projects'] });
-    },
-  });
+  const mutation = useCreateProject();
 
   const form = useForm({
     defaultValues: {

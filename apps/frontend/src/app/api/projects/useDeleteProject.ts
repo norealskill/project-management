@@ -1,6 +1,6 @@
-import { apiHelper } from './common';
+import { apiHelper } from '../common';
 
-export async function deleteProject(projectId: number) {
+export async function useDeleteProject(projectId: number) {
   const response = await fetch(apiHelper(`project/${projectId}`), {
     method: 'DELETE',
   });
