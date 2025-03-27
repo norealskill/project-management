@@ -26,6 +26,7 @@ function RouteComponent() {
   const onSubmit = () => {
     console.log('submit me baby');
     formRef.current && formRef.current.requestSubmit();
+    setIsOpen(false);
   };
 
   const onCancel = () => {
