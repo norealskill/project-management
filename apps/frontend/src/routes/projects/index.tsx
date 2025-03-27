@@ -22,6 +22,14 @@ function RouteComponent() {
     return () => setCtaButton(null);
   }, [setCtaButton]);
 
+  const onSubmit = () => {
+    alert('submitted');
+  };
+
+  const onCancel = () => {
+    alert('cancelled');
+  };
+
   return (
     <>
       <Drawer
@@ -29,6 +37,8 @@ function RouteComponent() {
         drawerTitle="Create Project"
         isOpen={isOpen}
         setIsOpen={setIsOpen}
+        onSubmit={onSubmit}
+        onCancel={onCancel}
       >
         <ProjectCreateForm />
       </Drawer>

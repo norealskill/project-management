@@ -57,9 +57,9 @@ const ProjectCreateForm = () => {
                   ) : null}
                 </div>
               </div>
-              <div className="flex justify-end text-zinc-400">
-                <p className="text-sm text-gray-500 -mt-5">Required</p>
-              </div>
+              <p className="flex justify-end text-sm text-gray-500 -mt-10 mr-7">
+                Required
+              </p>
             </>
           );
         }}
