@@ -3,7 +3,7 @@ import Drawer from '../../app/components/drawer';
 import ListProjects from '../../app/components/projectLists';
 import { createFileRoute } from '@tanstack/react-router';
 import { useNav } from '../../app/context/navContext';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export const Route = createFileRoute('/projects/')({
   component: RouteComponent,
@@ -12,6 +12,7 @@ export const Route = createFileRoute('/projects/')({
 function RouteComponent() {
   const { setCtaButton } = useNav();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const formRef = useRef<HTMLFormElement | null>(null);
 
   useEffect(() => {
     setCtaButton({
@@ -23,11 +24,12 @@ function RouteComponent() {
   }, [setCtaButton]);
 
   const onSubmit = () => {
-    alert('submitted');
+    console.log('submit me baby');
+    formRef.current && formRef.current.requestSubmit();
   };
 
   const onCancel = () => {
-    alert('cancelled');
+    formRef.current && formRef.current.reset();
   };
 
   return (
@@ -40,7 +42,7 @@ function RouteComponent() {
         onSubmit={onSubmit}
         onCancel={onCancel}
       >
-        <ProjectCreateForm />
+        <ProjectCreateForm formRef={formRef} />
       </Drawer>
       <ListProjects />
     </>

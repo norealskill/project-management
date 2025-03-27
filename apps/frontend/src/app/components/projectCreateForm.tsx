@@ -1,7 +1,14 @@
 import { useForm } from '@tanstack/react-form';
 import { useCreateProject } from '../api/projects/useCreateProject';
+import { RefObject } from 'react';
 
-const ProjectCreateForm = () => {
+type FormProps = {
+  formRef: RefObject<HTMLFormElement>;
+};
+
+const ProjectCreateForm: React.FC<FormProps> = (props) => {
+  const { formRef } = props;
+
   const mutation = useCreateProject();
 
   const form = useForm({
@@ -16,6 +23,7 @@ const ProjectCreateForm = () => {
 
   return (
     <form
+      ref={formRef}
       className="mt-6 space-y-5"
       onSubmit={(e) => {
         e.preventDefault();
@@ -63,27 +71,6 @@ const ProjectCreateForm = () => {
             </>
           );
         }}
-      />
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-        children={([canSubmit, isSubmitting]) => (
-          <div className="flex space-x-4">
-            <button
-              className="w-1/2 rounded-lg bg-blue-600 px-4 py-3 text-white shadow-md transition-all hover:bg-blue-700"
-              type="submit"
-              disabled={!canSubmit}
-            >
-              {isSubmitting ? '...' : 'Submit'}
-            </button>
-            <button
-              className="w-1/2 rounded-lg bg-gray-200 px-4 py-3 text-gray-700 shadow-md transition-all hover:bg-gray-300"
-              type="reset"
-              onClick={() => form.reset()}
-            >
-              Reset
-            </button>
-          </div>
-        )}
       />
     </form>
   );
