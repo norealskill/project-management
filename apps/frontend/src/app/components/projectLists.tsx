@@ -3,13 +3,19 @@ import { apiHelper } from '../api/common';
 import { Project } from '../api/types';
 import { useDeleteProject } from '../api/projects/useDeleteProject';
 import {
-  ColumnDef,
+  createColumnHelper,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
 
 const ListProjects = () => {
-  const columns: ColumnDef<Project>[] = [];
+  const columnHelper = createColumnHelper<Project>();
+  const columns = [
+    columnHelper.accessor('id', { header: 'ID' }),
+    columnHelper.accessor('name', { header: 'Name' }),
+    columnHelper.accessor('owner', { header: 'Owner' }),
+    columnHelper.accessor('tasks', { header: 'Tasks' }),
+  ];
 
   const { isPending, error, data } = useQuery({
     queryKey: ['projects'],
@@ -21,6 +27,14 @@ const ListProjects = () => {
     data,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  const columnHeaders = table
+    .getHeaderGroups()
+    .flatMap((headerGroup) =>
+      headerGroup.headers.map(
+        (header) => header.column.columnDef.header as string
+      )
+    );
 
   const queryClient = useQueryClient();
 
@@ -47,30 +61,15 @@ const ListProjects = () => {
             <table className="min-w-full border-separate border-spacing-0">
               <thead>
                 <tr>
-                  <th
-                    scope="col"
-                    className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter sm:pl-6 lg:pl-8"
-                  >
-                    ID
-                  </th>
-                  <th
-                    scope="col"
-                    className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter sm:table-cell"
-                  >
-                    Name
-                  </th>
-                  <th
-                    scope="col"
-                    className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter sm:table-cell"
-                  >
-                    Owner
-                  </th>
-                  <th
-                    scope="col"
-                    className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter lg:table-cell"
-                  >
-                    Tasks
-                  </th>
+                  {columnHeaders.map((header, index) => (
+                    <th
+                      key={index}
+                      scope="col"
+                      className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter sm:pl-6 lg:pl-8"
+                    >
+                      {header}
+                    </th>
+                  ))}
                   <th
                     scope="col"
                     className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-4 pl-3 backdrop-blur-sm backdrop-filter sm:pr-6 lg:pr-8"
