@@ -24,3 +24,10 @@ export type UserCreateArgs = {
   email: string;
   password: string;
 };
+
+export type ProjectUpdateArgs = {
+  where: {
+    id: string;
+  };
+  data: ProjectCreateArgs;
+};

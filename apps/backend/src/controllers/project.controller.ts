@@ -1,4 +1,12 @@
-import { Controller, Get, Delete, Param, Body, Post } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Delete,
+  Param,
+  Body,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { ProjectsService } from '../services/project.service';
 import { Prisma, Project as ProjectModel } from '@prisma/client';
 
@@ -35,6 +43,13 @@ export class ProjectController {
     @Body() createProject: Prisma.ProjectCreateInput
   ): Promise<ProjectModel> {
     return this.projectService.createProject(createProject);
+  }
+
+  @Put('/')
+  async updateProject(
+    @Body() updateProject: Prisma.ProjectUpdateArgs
+  ): Promise<ProjectModel> {
+    return this.projectService.updateProject(updateProject);
   }
 
   @Delete('/:id')

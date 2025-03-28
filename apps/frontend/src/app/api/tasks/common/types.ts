@@ -10,3 +10,10 @@ export type TaskCreateArgs = {
   title: string;
   completed: boolean;
 };
+
+export type TaskUpdateArgs = {
+  where: {
+    id: string;
+  };
+  data: TaskCreateArgs;
+};
