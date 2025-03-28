@@ -1,20 +1,20 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiHelper } from '../common/apiHelper';
-import { ProjectCreateArgs } from './common/types';
+import { TaskCreateArgs } from './common/types';
 
-export function useCreateProject() {
+export function useCreateTask() {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: (newProject: ProjectCreateArgs) => {
-      return fetch(apiHelper('project'), {
+    mutationFn: (newTask: TaskCreateArgs) => {
+      return fetch(apiHelper('task'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newProject),
+        body: JSON.stringify(newTask),
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['projects'] });
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
     },
   });
 

@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { apiHelper } from '../api/common';
-import { Project } from '../api/types';
+import { apiHelper } from '../api/common/apiHelper';
+import { Project } from '../api/projects/common/types';
 import { useDeleteProject } from '../api/projects/useDeleteProject';
 import {
   createColumnHelper,
