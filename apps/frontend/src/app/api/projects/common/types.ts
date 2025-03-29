@@ -3,8 +3,11 @@ import { Task } from '../../tasks/common/types';
 export type Project = {
   id: number;
   name: string;
+  created: Date;
+  status: string;
   owner?: User;
   tasks?: Task[];
+  due?: Date;
 };
 
 export type User = {
@@ -16,6 +19,7 @@ export type User = {
 export type ProjectCreateArgs = {
   id?: number;
   name: string;
+  status?: string;
   ownerId?: number;
   taskIds?: number[];
 };

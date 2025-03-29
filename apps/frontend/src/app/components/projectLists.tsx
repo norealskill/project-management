@@ -1,41 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { apiHelper } from '../api/common/apiHelper';
 import { Project } from '../api/projects/common/types';
+import { apiHelper } from '../api/common/apiHelper';
+import EmptyState from './emptyState';
 import { useDeleteProject } from '../api/projects/useDeleteProject';
-import {
-  createColumnHelper,
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
+import { localeDateStringOptions } from './common/utilityFunctions';
 
 const ListProjects = () => {
-  const columnHelper = createColumnHelper<Project>();
-  const columns = [
-    columnHelper.accessor('id', { header: 'ID' }),
-    columnHelper.accessor('name', { header: 'Name' }),
-    columnHelper.accessor('owner', { header: 'Owner' }),
-    columnHelper.accessor('tasks', { header: 'Tasks' }),
-  ];
-
-  const { isPending, error, data } = useQuery({
-    queryKey: ['projects'],
-    queryFn: () => fetch(apiHelper('project')).then((res) => res.json()),
-  });
-
-  const table = useReactTable({
-    columns,
-    data,
-    getCoreRowModel: getCoreRowModel(),
-  });
-
-  const columnHeaders = table
-    .getHeaderGroups()
-    .flatMap((headerGroup) =>
-      headerGroup.headers.map(
-        (header) => header.column.columnDef.header as string
-      )
-    );
-
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -49,107 +19,77 @@ const ListProjects = () => {
     return classes.filter(Boolean).join(' ');
   }
 
+  const { isPending, error, data } = useQuery({
+    queryKey: ['projects'],
+    queryFn: () => fetch(apiHelper('project')).then((res) => res.json()),
+  });
+
   if (isPending) return 'Loading...';
 
   if (error) return 'An error has occurred: ' + error.message;
 
+  if (!isPending && !data) return <EmptyState model="project" />;
+
+  const statuses: Record<string, string> = {
+    Completed: 'text-white bg-black ring-black',
+    'In Progress': 'text-black-600 bg-green-50 ring-green-600/20',
+    'On Hold': 'text-black-800 bg-yellow-50 ring-yellow-600/20',
+    'Not Started': 'text-black-800 bg-gray-50 ring-gray-600/20',
+  };
+
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
-      <div className="mt-8 flow-root">
-        <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle">
-            <table className="min-w-full border-separate border-spacing-0">
-              <thead>
-                <tr>
-                  {columnHeaders.map((header, index) => (
-                    <th
-                      key={index}
-                      scope="col"
-                      className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter sm:pl-6 lg:pl-8"
-                    >
-                      {header}
-                    </th>
-                  ))}
-                  <th
-                    scope="col"
-                    className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-4 pl-3 backdrop-blur-sm backdrop-filter sm:pr-6 lg:pr-8"
+    <ul className="divide-y divide-gray-100">
+      {data.map((project: Project) => {
+        return (
+          <a
+            key={project.id}
+            href={`/projects/${project.id}/view`}
+            className="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50 sm:block"
+          >
+            <li
+              key={project.id}
+              className="flex items-center justify-between gap-x-6 py-5"
+            >
+              <div className="min-w-0">
+                <div className="flex items-start gap-x-3">
+                  <p className="text-sm/6 font-semibold text-gray-900">
+                    {project.name}
+                  </p>
+                  <p
+                    className={classNames(
+                      statuses[project.status],
+                      'mt-0.5 rounded-md px-1.5 py-0.5 text-xs font-medium whitespace-nowrap ring-1 ring-inset'
+                    )}
                   >
-                    <span className="sr-only">Actions</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {table.getRowModel().rows.map((row) => (
-                  <tr key={row.original.id}>
-                    <td
-                      className={classNames(
-                        table.getRowCount() !== row.index - 1
-                          ? 'border-b border-gray-200'
-                          : '',
-                        'py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6 lg:pl-8'
-                      )}
-                    >
-                      {row.original.id}
-                    </td>
-                    <td
-                      className={classNames(
-                        table.getRowCount() !== row.index - 1
-                          ? 'border-b border-gray-200'
-                          : '',
-                        'py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-left text-gray-900 sm:pl-6 lg:pl-8'
-                      )}
-                    >
-                      {row.original.name}
-                    </td>
-                    <td
-                      className={classNames(
-                        table.getRowCount() !== row.index - 1
-                          ? 'border-b border-gray-200'
-                          : '',
-                        'hidden px-3 py-4 text-sm font-medium whitespace-nowrap text-left text-gray-500 sm:table-cell'
-                      )}
-                    >
-                      {row.original.owner?.email ?? '<Unassigned>'}
-                    </td>
-                    <td
-                      className={classNames(
-                        table.getRowCount() !== row.index - 1
-                          ? 'border-b border-gray-200'
-                          : '',
-                        'hidden px-3 py-4 text-sm font-medium whitespace-nowrap text-gray-500 lg:table-cell'
-                      )}
-                    >
-                      {row.original.tasks?.length ?? '0'}
-                    </td>
-                    <td
-                      className={classNames(
-                        table.getRowCount() !== row.index - 1
-                          ? 'border-b border-gray-200'
-                          : '',
-                        'relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-8 lg:pr-8'
-                      )}
-                    >
-                      <button
-                        type="button"
-                        className="text-white bg-blue-500 hover:bg-red-600 px-3 py-1 ml-2 rounded-lg transition"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="text-white bg-red-500 hover:bg-red-600 px-3 py-1 ml-2 rounded-lg transition"
-                        onClick={() => mutation.mutate(row.original.id)}
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
+                    {project.status}
+                  </p>
+                </div>
+                <div className="mt-1 flex items-center gap-x-2 text-xs/5 text-gray-500">
+                  <p className="whitespace-nowrap">
+                    Due on{' '}
+                    {project.due && (
+                      <time dateTime={project.due.toLocaleDateString()}>
+                        {project.due.toLocaleDateString()}
+                      </time>
+                    )}
+                  </p>
+                  <svg viewBox="0 0 2 2" className="size-0.5 fill-current">
+                    <circle r={1} cx={1} cy={1} />
+                  </svg>
+                  <p className="truncate">Owned by {project.owner?.email}</p>
+                </div>
+              </div>
+              <p>
+                {new Date(project.created).toLocaleDateString(
+                  'en-US',
+                  localeDateStringOptions
+                )}
+              </p>
+            </li>
+          </a>
+        );
+      })}
+    </ul>
   );
 };
 

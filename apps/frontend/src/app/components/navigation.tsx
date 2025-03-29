@@ -100,7 +100,7 @@ const Navigation = () => {
               <h1 className="text-3xl font-bold tracking-tight text-white">
                 {location.pathname !== '/'
                   ? location.pathname.charAt(1).toUpperCase() +
-                    location.pathname.slice(2)
+                    location.pathname.slice(2).split('/')[0]
                   : 'Dashboard'}
               </h1>
               <div>

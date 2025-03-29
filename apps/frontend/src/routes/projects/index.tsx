@@ -24,9 +24,10 @@ function RouteComponent() {
   }, [setCtaButton]);
 
   const onSubmit = () => {
-    console.log('submit me baby');
-    formRef.current && formRef.current.requestSubmit();
-    setIsOpen(false);
+    if (formRef.current) {
+      formRef.current.requestSubmit();
+      //formRef.current.checkValidity() && setIsOpen(false);
+    }
   };
 
   const onCancel = () => {
