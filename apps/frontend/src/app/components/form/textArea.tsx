@@ -1,14 +1,10 @@
 import { FormFieldProps } from './common/formFieldProps';
 
-interface InputTextProps extends FormFieldProps {
-  placeholder?: string;
-}
-
-const InputText: React.FC<InputTextProps> = (props) => {
-  const { field, label, required, placeholder, error } = props;
+const TextArea: React.FC<FormFieldProps> = (props) => {
+  const { field, label, required, error } = props;
 
   return (
-    <>
+    <div>
       <div className="flex justify-between">
         <label
           htmlFor={label}
@@ -21,14 +17,13 @@ const InputText: React.FC<InputTextProps> = (props) => {
         </span>
       </div>
       <div className="mt-2">
-        <input
+        <textarea
           id={label}
           name={label}
-          type="text"
-          placeholder={placeholder}
-          value={field.state.value}
-          aria-describedby={label}
+          rows={4}
           className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+          defaultValue={''}
+          value={field.state.value}
           onBlur={field.handleBlur}
           onChange={(e) => field.handleChange(e.target.value)}
         />
@@ -36,8 +31,8 @@ const InputText: React.FC<InputTextProps> = (props) => {
       <p id={`${label}-error`} className="mt-2 text-sm text-red-600">
         {error}
       </p>
-    </>
+    </div>
   );
 };
 
-export default InputText;
+export default TextArea;

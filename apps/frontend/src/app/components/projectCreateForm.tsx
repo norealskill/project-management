@@ -3,6 +3,8 @@ import { useCreateProject } from '../api/projects/useCreateProject';
 import { RefObject } from 'react';
 import InputText from './form/input';
 import SelectList from './form/selectList';
+import TextArea from './form/textArea';
+import Calendar from './form/calendar';
 
 type FormProps = {
   formRef: RefObject<HTMLFormElement>;
@@ -16,6 +18,8 @@ const ProjectCreateForm: React.FC<FormProps> = (props) => {
   const form = useForm({
     defaultValues: {
       name: '',
+      description: '',
+      due: '',
       status: 'Not Started',
     },
     onSubmit: async ({ value }) => {
@@ -27,7 +31,6 @@ const ProjectCreateForm: React.FC<FormProps> = (props) => {
   return (
     <form
       ref={formRef}
-      className="mt-6 space-y-5"
       onSubmit={(e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -46,12 +49,26 @@ const ProjectCreateForm: React.FC<FormProps> = (props) => {
         }}
         children={(field) => {
           return (
-            <div className="space-y-2 px-4 sm:grid sm:grid-cols-1 sm:gap-1 sm:space-y-0 sm:px-6 sm:py-5">
+            <div className="sm:grid sm:grid-cols-1 sm:gap-1 sm:space-y-1 sm:px-6 sm:pt-5">
               <InputText
                 field={field}
                 label="Project Name"
                 required={true}
-                value={field.state.value}
+                error={field.state.meta.errors.join(', ')}
+              />
+            </div>
+          );
+        }}
+      />
+      <form.Field
+        name="description"
+        children={(field) => {
+          return (
+            <div className="sm:grid sm:grid-cols-1 sm:gap-1 sm:px-6">
+              <TextArea
+                field={field}
+                label="Description"
+                required={false}
                 error={field.state.meta.errors.join(', ')}
               />
             </div>
@@ -62,11 +79,26 @@ const ProjectCreateForm: React.FC<FormProps> = (props) => {
         name="status"
         children={(field) => {
           return (
-            <div className="space-y-2 px-4 sm:grid sm:grid-cols-1 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+            <div className="sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6">
               <SelectList
                 field={field}
                 label="Status"
                 required={true}
+                error={field.state.meta.errors.join(', ')}
+              />
+            </div>
+          );
+        }}
+      />
+      <form.Field
+        name="due"
+        children={(field) => {
+          return (
+            <div className="sm:grid sm:grid-cols-1 sm:gap-1 sm:px-6">
+              <Calendar
+                field={field}
+                label="Due"
+                required={false}
                 error={field.state.meta.errors.join(', ')}
               />
             </div>

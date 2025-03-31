@@ -19,7 +19,9 @@ export type User = {
 export type ProjectCreateArgs = {
   id?: number;
   name: string;
+  description?: string;
   status?: string;
+  due?: string;
   ownerId?: number;
   taskIds?: number[];
 };

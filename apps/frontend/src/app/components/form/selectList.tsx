@@ -7,21 +7,12 @@ import {
   ListboxOptions,
 } from '@headlessui/react';
 import { CheckIcon } from '@heroicons/react/20/solid';
-import { FormFieldProps } from './common/formFieldProps';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
-import { AnyFieldApi } from '@tanstack/react-form';
+import { FormFieldProps } from './common/formFieldProps';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
-
-interface SelectListProps extends FormFieldProps {
-  field: AnyFieldApi;
-  label: string;
-  required?: boolean;
-  error?: string;
-}
-
 const status: Status[] = [
   { id: 1, name: 'Not Started', style: 'bg-gray-400' },
   {
@@ -39,7 +30,7 @@ type Status = {
   style: string;
 };
 
-const SelectList: React.FC<SelectListProps> = (props) => {
+const SelectList: React.FC<FormFieldProps> = (props) => {
   const [selected, setSelected] = useState<string>('Not Started');
 
   const { field, label, required, error } = props;
@@ -55,13 +46,15 @@ const SelectList: React.FC<SelectListProps> = (props) => {
         field.handleChange(e);
       }}
     >
-      <Label className="block text-sm/6 font-medium text-gray-900">
-        {label}
-      </Label>
-      <span id={`required-${label}`} className="text-sm/6 text-gray-500">
-        {required ? 'Required' : ''}
-      </span>
-      <div className="relative mt-2">
+      <div className="flex justify-between">
+        <Label className="block text-sm/6 font-medium text-gray-900">
+          {label}
+        </Label>
+        <span id={`required-${label}`} className="text-sm/6 text-gray-500">
+          {required ? 'Required' : ''}
+        </span>
+      </div>
+      <div>
         <ListboxButton className="grid w-full cursor-default grid-cols-1 rounded-md bg-white py-1.5 pr-2 pl-3 text-left text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
           <span className="col-start-1 row-start-1 flex items-center gap-3 pr-6">
             <span
@@ -81,7 +74,7 @@ const SelectList: React.FC<SelectListProps> = (props) => {
 
         <ListboxOptions
           transition
-          className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base ring-1 shadow-lg ring-black/5 focus:outline-hidden data-leave:transition data-leave:duration-100 data-leave:ease-in data-closed:data-leave:opacity-0 sm:text-sm"
+          className="absolute z-10 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base ring-1 shadow-lg ring-black/5 focus:outline-hidden data-leave:transition data-leave:duration-100 data-leave:ease-in data-closed:data-leave:opacity-0 sm:text-sm"
         >
           {status.map((s) => (
             <ListboxOption

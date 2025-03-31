@@ -1,20 +1,10 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Project } from '../api/projects/common/types';
 import { apiHelper } from '../api/common/apiHelper';
 import EmptyState from './emptyState';
-import { useDeleteProject } from '../api/projects/useDeleteProject';
-import { localeDateStringOptions } from './common/utilityFunctions';
+import { yearMonthDay } from './common/utilityFunctions';
 
 const ListProjects = () => {
-  const queryClient = useQueryClient();
-
-  const mutation = useMutation({
-    mutationFn: useDeleteProject,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['projects'] });
-    },
-  });
-
   function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ');
   }
@@ -68,8 +58,16 @@ const ListProjects = () => {
                   <p className="whitespace-nowrap">
                     Due on{' '}
                     {project.due && (
-                      <time dateTime={project.due.toLocaleDateString()}>
-                        {project.due.toLocaleDateString()}
+                      <time
+                        dateTime={new Date(project.due).toLocaleDateString(
+                          'en-US',
+                          yearMonthDay
+                        )}
+                      >
+                        {new Date(project.due).toLocaleDateString(
+                          'en-US',
+                          yearMonthDay
+                        )}
                       </time>
                     )}
                   </p>
@@ -82,7 +80,7 @@ const ListProjects = () => {
               <p>
                 {new Date(project.created).toLocaleDateString(
                   'en-US',
-                  localeDateStringOptions
+                  yearMonthDay
                 )}
               </p>
             </li>
