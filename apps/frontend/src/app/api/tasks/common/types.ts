@@ -7,8 +7,15 @@ export type Task = {
 };
 
 export type TaskCreateArgs = {
-  title: string;
-  completed: boolean;
+  name: string;
+  status: string;
+  started: string;
+  completed: string;
+  project: {
+    connect: {
+      id: number;
+    };
+  };
 };
 
 export type TaskUpdateArgs = {

@@ -5,6 +5,7 @@ import { Prisma, Task as TaskModel } from '@prisma/client';
 @Controller('task')
 export class TaskController {
   constructor(private readonly taskService: TasksService) {}
+
   @Get('/')
   async getProjects(): Promise<TaskModel[] | null> {
     return this.taskService.tasks({});
