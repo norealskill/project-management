@@ -39,6 +39,8 @@ export class ProjectController {
           owner: true,
         },
       });
+    } else if (!include) {
+      return this.projectService.projects({});
     }
 
     throw new BadRequestException('include must be [owner | tasks | all]');

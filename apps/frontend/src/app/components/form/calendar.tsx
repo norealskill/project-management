@@ -47,19 +47,20 @@ const Calendar: React.FC<FormFieldProps> = (props) => {
               <Button
                 label="previous"
                 icon={<ChevronLeftIcon className="size-5" aria-hidden="true" />}
-                cssClasses="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
+                cssClasses="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 enabled:hover:text-gray-500 disabled:text-gray-200"
                 onClick={() =>
                   setSelectedDate(
                     new Date(selectedDate.setMonth(selectedDate.getMonth() - 1))
                   )
                 }
+                disabled={selectedDate.getMonth() === new Date().getMonth()}
               />
               <Button
                 label="Next month"
                 icon={
                   <ChevronRightIcon className="size-5" aria-hidden="true" />
                 }
-                cssClasses="-my-1.5 -mr-2.5 flex flex-none items-center justify-center  text-gray-400 hover:text-gray-500"
+                cssClasses="-my-1.5 -mr-2.5 flex flex-none items-center justify-center text-gray-400 enabled:hover:text-gray-500"
                 onClick={() =>
                   setSelectedDate(
                     new Date(selectedDate.setMonth(selectedDate.getMonth() + 1))
@@ -109,7 +110,7 @@ const Calendar: React.FC<FormFieldProps> = (props) => {
                       'text-gray-400',
                     day.isSelected && day.isToday && 'bg-indigo-600',
                     day.isSelected && !day.isToday && 'bg-gray-900',
-                    !day.isSelected && 'hover:bg-gray-200',
+                    !day.isSelected && 'enabled:hover:bg-gray-200',
                     (day.isSelected || day.isToday) && 'font-semibold',
                     'mx-auto flex size-8 items-center justify-center rounded-full disabled:text-gray-200'
                   )}
